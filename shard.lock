@@ -2,7 +2,7 @@ version: 1.0
 shards:
   action-controller:
     github: spider-gazelle/action-controller
-    version: 1.8.0
+    version: 2.0.2
 
   active-model:
     github: spider-gazelle/active-model
@@ -12,15 +12,31 @@ shards:
     github: veelenga/ameba
     version: 0.10.1
 
+  bindata:
+    github: spider-gazelle/bindata
+    version: 1.1.4
+
+  bisect:
+    github: spider-gazelle/bisect
+    version: 1.2.0
+
+  cron_parser:
+    github: kostya/cron_parser
+    version: 0.2.0
+
   habitat:
     github: luckyframework/habitat
     version: 0.4.3
 
   kilt:
     github: jeromegn/kilt
-    version: 0.4.0
+    version: 0.5.0
 
   radix:
     github: luislavena/radix
     version: 0.3.9
+
+  tasker:
+    github: spider-gazelle/tasker
+    version: 1.2.2
 
