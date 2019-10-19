@@ -22,7 +22,7 @@ class Session
   end
 
   # Binary protocol: signal, remote_ip, client_id, size, data
-  def initialize(@server_port : Int32, @websocket : HTTP::WebSocket, @tracking : Array(String), @logger : Logger = Logger.new(STDOUT))
+  def initialize(@tcp_transport : Bool, @server_port : Int32, @websocket : HTTP::WebSocket, @tracking : Array(String), @logger : Logger = Logger.new(STDOUT))
     @connections = Hash(String, Array(UInt64)).new do |h, k|
       h[k] = [] of UInt64
     end
@@ -30,12 +30,15 @@ class Session
 
   def configure_websocket
     @websocket.on_ping { @websocket.pong }
-    @websocket.on_close { Servers.close_tcp_server(@server_port, self) }
-    @websocket.on_binary { |bytes| parse(bytes) }
-    Servers.open_tcp_server(@server_port, self)
+    if @tcp_transport
+      @websocket.on_binary { |bytes| parse_tcp(bytes) }
+    else
+      @websocket.on_binary { |bytes| parse_udp(bytes) }
+    end
+    self
   end
 
-  def parse(message)
+  def parse_tcp(message)
     message = IO::Memory.new(message, false)
     message = message.read_bytes(Protocol)
     case message.message
@@ -43,6 +46,17 @@ class Session
       Servers.send_client_data(@server_port, message.ip_address, message.id_or_port, message.data)
     when Protocol::MessageType::CLOSE
       Servers.close_client_connection(@server_port, message.ip_address, message.id_or_port)
+    else
+      @logger.warn "unexpected message type received #{message.message}"
+    end
+  end
+
+  def parse_udp(message)
+    message = IO::Memory.new(message, false)
+    message = message.read_bytes(Protocol)
+    case message.message
+    when Protocol::MessageType::WRITE
+      Listeners.send_client_data(@server_port, message.ip_address, message.id_or_port, message.data)
     else
       @logger.warn "unexpected message type received #{message.message}"
     end

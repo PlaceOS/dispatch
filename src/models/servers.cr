@@ -5,9 +5,6 @@ class Servers
   @@tcp_tracking = Hash(Int32, Hash(String, Array(Session))).new do |hash, key|
     hash[key] = Hash(String, Array(Session)).new { |h, k| h[k] = [] of Session }
   end
-  @@udp_tracking = Hash(Int32, Hash(String, Array(Session))).new do |hash, key|
-    hash[key] = Hash(String, Array(Session)).new { |h, k| h[k] = [] of Session }
-  end
 
   # port => Server
   @@tcp_servers = {} of Int32 => TCPServerManager
