@@ -88,33 +88,31 @@ class Listeners
   # Connection management
   # =====================
   def self.read_data(sessions, server, port)
-    begin
-      raw_data = Bytes.new(2048)
-      while !server.closed?
-        bytes_read, client_addr = server.receive(raw_data)
-        break if bytes_read == 0 # IO was closed
+    raw_data = Bytes.new(2048)
+    while !server.closed?
+      bytes_read, client_addr = server.receive(raw_data)
+      break if bytes_read == 0 # IO was closed
 
-        remote_ip = client_addr.address
-        interested = sessions[remote_ip]?
-        if interested.nil? || interested.empty?
-          logger.warn "ignoring UDP data from #{remote_ip} on #{port}", " server_protocol=udp server_port=#{port} remote_ip=#{remote_ip} accepted=false"
-          next
-        end
-
-        client_port = client_addr.port.to_u64
-
-        data = raw_data[0, bytes_read]
-        message = Session::Protocol.new
-        message.message = Session::Protocol::MessageType::RECEIVED
-        message.ip_address = remote_ip
-        message.id_or_port = client_port
-        message.data = data
-        message = message.to_slice
-
-        interested.each(&.io_callback(message))
+      remote_ip = client_addr.address
+      interested = sessions[remote_ip]?
+      if interested.nil? || interested.empty?
+        logger.warn "ignoring UDP data from #{remote_ip} on #{port}", " server_protocol=udp server_port=#{port} remote_ip=#{remote_ip} accepted=false"
+        next
       end
-    rescue IO::Error
-    rescue Errno
+
+      client_port = client_addr.port.to_u64
+
+      data = raw_data[0, bytes_read]
+      message = Session::Protocol.new
+      message.message = Session::Protocol::MessageType::RECEIVED
+      message.ip_address = remote_ip
+      message.id_or_port = client_port
+      message.data = data
+      message = message.to_slice
+
+      interested.each(&.io_callback(message))
     end
+  rescue IO::Error
+  rescue Errno
   end
 end

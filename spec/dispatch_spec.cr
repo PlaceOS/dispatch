@@ -25,7 +25,6 @@ describe Dispatcher do
         end
 
         TCPSocket.open("localhost", 6001) do |client|
-          tcp_connection = client
           client.write("testing".to_slice)
           sleep 1
         end
@@ -66,7 +65,7 @@ describe Dispatcher do
             message.data = "reply".to_slice
             msg = message.to_slice
 
-            socket.stream(true, msg.size) { |io| io.write msg }
+            socket.stream(true, msg.size) { |stream| stream.write msg }
           when Session::Protocol::MessageType::CLOSED
             received_close = true
           end
@@ -74,7 +73,6 @@ describe Dispatcher do
 
         TCPSocket.open("localhost", 6001) do |client|
           # Send some data to the server
-          tcp_connection = client
           client.write("testing".to_slice)
           raw_data = Bytes.new(1024)
 
