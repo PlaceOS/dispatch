@@ -80,10 +80,10 @@ describe Dispatcher do
           bytes_read = client.read(raw_data)
           sent_msg = String.new(raw_data[0, bytes_read])
         end
-
-        # Wait for the client to close
-        sleep 1
       end
+
+      # Wait for the client to close
+      sleep 1
 
       result = curl("GET", "/api/server?bearer_token=testing")
       after_stats = JSON.parse(result.body)
