@@ -1,43 +1,66 @@
-# Spider-Gazelle Application Template
+# Server Dispatch
 
-[![Build Status](https://travis-ci.org/spider-gazelle/spider-gazelle.svg?branch=master)](https://travis-ci.org/spider-gazelle/spider-gazelle)
+[![Build Status](https://travis-ci.org/aca-labs/crystal-engine-server-dispatch.svg?branch=master)](https://travis-ci.org/aca-labs/crystal-engine-server-dispatch)
 
-Clone this repository to start building your own spider-gazelle based application
+This allows engine drivers to register new servers for devices that might connect to engine vs engine connecting to devices.
 
-## Documentation
+* Drivers can indicate a port they want open and the IP addresses they'll accept data from.
+* The details of the clients and data is then streamed to the drivers.
+* Servers are only opened if there is a driver listening and ports are closed otherwise.
 
-Detailed documentation and guides available: https://spider-gazelle.net/
+## Usage
 
-* [Action Controller](https://github.com/spider-gazelle/action-controller) base class for building [Controllers](http://guides.rubyonrails.org/action_controller_overview.html)
-* [Active Model](https://github.com/spider-gazelle/active-model) base class for building [ORMs](https://en.wikipedia.org/wiki/Object-relational_mapping)
-* [Habitat](https://github.com/luckyframework/habitat) configuration and settings for Crystal projects
-* [router.cr](https://github.com/tbrand/router.cr) base request handling
-* [Radix](https://github.com/luislavena/radix) Radix Tree implementation for request routing
-* [HTTP::Server](https://crystal-lang.org/api/latest/HTTP/Server.html) built-in Crystal Lang HTTP server
-  * Request
-  * Response
-  * Cookies
-  * Headers
-  * Params etc
+There are two websocket endpoints one for TCP and one for UDP
+
+* `/api/server/tcp_dispatch`
+* `/api/server/udp_dispatch`
+
+The query string should include the
+
+* `bearer_token` used to authenticate the request
+* `port` the server should run on
+* `accept` a comma delimited list of client IP addresses that are expected to connect to the server
+
+```
+WS /api/server/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1
+```
+
+The websocket only communicates over `BINARY` frames and has the following message types:
+
+* OPENED == `0` dispatcher => driver - a TCP client connected to the server
+* CLOSED == `1` dispatcher => driver - a TCP client disconnected
+* RECEIVED == `2` dispatcher => driver - data was received from a UDP or TCP client
+* WRITE == `3` driver => dispatcher - request some data be written to a UDP or TCP client
+* CLOSE == `4` driver => dispatcher - request a TCP client be disconnected
+
+The message structure sent down the websocket looks like:
+
+```
+uint8 message_type (OPENED, CLOSED etc)
+string ip_address (remote IP, with null character termination)
+uint64 id_or_port (client id for TCP, remote port for UDP)
+uint32 data_size (number of bytes of data included)
+bytes data (any data associated with the message, RECEIVED and WRITE messages only)
+```
 
 
-Spider-Gazelle builds on the amazing performance of **router.cr** [here](https://github.com/tbrand/which_is_the_fastest).:rocket:
+## Statistics
 
+Statistics are available via a `GET` request
 
-## Testing
+* `GET /api/server?bearer_token=testing`
 
-`crystal spec`
+```yaml
 
-* to run in development mode `crystal ./src/app.cr`
+{
+  # Engine drivers requesting a UDP server be open
+  "udp_listeners": {"162": 8},
 
-## Compiling
+  # Engine drivers requesting a TCP server be open
+  "tcp_listeners": {"6001": 1},
 
-`crystal build ./src/app.cr`
+  # Remote clients connected to the live servers
+  "tcp_clients": {"6001": 1}
+}
 
-### Deploying
-
-Once compiled you are left with a binary `./app`
-
-* for help `./app --help`
-* viewing routes `./app --routes`
-* run on a different port or host `./app -b 0.0.0.0 -p 80`
+```
