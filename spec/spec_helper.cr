@@ -10,8 +10,8 @@ require "../lib/action-controller/spec/curl_context"
 # Binds to the system websocket endpoint
 def new_websocket(path)
   socket = HTTP::WebSocket.new("localhost", path, 6000)
-  yield socket
   spawn { socket.run }
+  yield socket
   Fiber.yield
   socket.close
 end

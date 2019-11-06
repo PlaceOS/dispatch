@@ -9,6 +9,22 @@ class Servers
   # port => Server
   @@tcp_servers = {} of Int32 => TCPServerManager
 
+  def self.stats
+    sessions = Set(Session).new
+    engine_listeners = {} of Int32 => Int32
+    @@tcp_tracking.each do |port, client_ip_to_sessions|
+      client_ip_to_sessions.values.each { |sess| sessions.concat(sess) }
+      engine_listeners[port] = sessions.size
+      sessions.clear
+    end
+
+    server_clients = {} of Int32 => Int32
+    @@tcp_servers.each { |port, manager| server_clients[port] = manager.client_count }
+
+    # Websocket sessions, connected clients
+    {engine_listeners, server_clients}
+  end
+
   def self.logger
     ActionController::Base.settings.logger
   end
@@ -43,10 +59,12 @@ class Servers
     if manager = @@tcp_servers[server_port]?
       if connections = manager.connections[remote_ip]?
         if client = connections[client_id]?
-          client.write data
+          client.write(data) unless client.closed?
         end
       end
     end
+  rescue Errno
+  rescue IO::Error
   end
 
   def self.close_tcp_server(port : Int32, session : Session)

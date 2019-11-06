@@ -8,6 +8,19 @@ class Listeners
   # port => Server
   @@udp_servers = {} of Int32 => UDPSocket
 
+  def self.stats
+    sessions = Set(Session).new
+    engine_listeners = {} of Int32 => Int32
+    @@udp_tracking.each do |port, client_ip_to_sessions|
+      client_ip_to_sessions.values.each { |sess| sessions.concat(sess) }
+      engine_listeners[port] = sessions.size
+      sessions.clear
+    end
+
+    # Websocket sessions, connected clients
+    engine_listeners
+  end
+
   def self.logger
     ActionController::Base.settings.logger
   end

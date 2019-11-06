@@ -26,6 +26,19 @@ class Dispatcher < Application
     ws.on_close { Listeners.close_udp_server(port, session) }
   end
 
+  # Returns details about open servers and number of engine drivers listening.
+  # Also returns details about the number of TCP client connections to the servers
+  def index
+    udp_listeners = Listeners.stats
+    tcp_listeners, tcp_clients = Servers.stats
+
+    render json: {
+      udp_listeners: udp_listeners,
+      tcp_listeners: tcp_listeners,
+      tcp_clients: tcp_clients
+    }
+  end
+
   AUTH_SECRET = ENV["SERVER_SECRET"]? || "testing"
 
   def authenticate

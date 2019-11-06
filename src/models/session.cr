@@ -71,17 +71,17 @@ class Session
   # state callbacks:
   def connection_opened(remote_ip, client_id, message)
     @connections[remote_ip] << client_id
-    @websocket.stream { |io| io.write message }
+    @websocket.stream(true, message.size) { |io| io.write message }
   end
 
   def io_callback(message)
-    @websocket.stream { |io| io.write message }
+    @websocket.stream(true, message.size) { |io| io.write message }
   end
 
   def connection_closed(remote_ip, client_id, message)
     if clients = @connections[remote_ip]?
       clients.delete(client_id)
     end
-    @websocket.stream { |io| io.write message }
+    @websocket.stream(true, message.size) { |io| io.write message }
   end
 end
