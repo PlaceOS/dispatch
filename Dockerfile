@@ -3,7 +3,7 @@ ADD . /src
 WORKDIR /src
 
 # Build App
-RUN shards build --production
+RUN shards build --error-trace --production
 
 # Run the app binding on port 8080
 EXPOSE 8080
