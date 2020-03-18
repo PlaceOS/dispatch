@@ -35,7 +35,7 @@ class Dispatcher < Application
     render json: {
       udp_listeners: udp_listeners,
       tcp_listeners: tcp_listeners,
-      tcp_clients: tcp_clients
+      tcp_clients:   tcp_clients,
     }
   end
 

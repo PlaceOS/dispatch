@@ -12,7 +12,7 @@ describe Dispatcher do
           io = IO::Memory.new(data)
           message = io.read_bytes(Session::Protocol)
 
-          #puts "GOT #{message.message} = #{data}"
+          # puts "GOT #{message.message} = #{data}"
 
           case message.message
           when Session::Protocol::MessageType::OPENED

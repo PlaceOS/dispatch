@@ -1,4 +1,3 @@
-
 class TCPServerManager
   def initialize(@server)
     @connections = Hash(String, Hash(UInt64, IPSocket)).new do |h, k|
