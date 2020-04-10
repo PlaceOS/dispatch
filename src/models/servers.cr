@@ -63,7 +63,6 @@ class Servers
         end
       end
     end
-  rescue Errno
   rescue IO::Error
   end
 
@@ -167,7 +166,6 @@ class Servers
         interested.each(&.io_callback(message))
       end
     rescue IO::Error
-    rescue Errno
     ensure
       # remove the client and inform sessions
       manager.remove_connection(remote_ip, client_id)

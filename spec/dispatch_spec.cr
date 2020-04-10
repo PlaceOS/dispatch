@@ -21,6 +21,7 @@ describe Dispatcher do
             received_msg = String.new(message.data)
           when Session::Protocol::MessageType::CLOSED
             received_close = true
+          else
           end
         end
 
@@ -68,6 +69,7 @@ describe Dispatcher do
             socket.stream(true, msg.size) { |stream| stream.write msg }
           when Session::Protocol::MessageType::CLOSED
             received_close = true
+          else
           end
         end
 
@@ -80,10 +82,10 @@ describe Dispatcher do
           bytes_read = client.read(raw_data)
           sent_msg = String.new(raw_data[0, bytes_read])
         end
-      end
 
-      # Wait for the client to close
-      sleep 1
+        # Wait for the client to close
+        sleep 1
+      end
 
       result = curl("GET", "/api/server?bearer_token=testing")
       after_stats = JSON.parse(result.body)

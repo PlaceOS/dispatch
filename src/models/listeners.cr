@@ -46,12 +46,9 @@ class Listeners
       begin
         remote = Socket::IPAddress.new(remote_ip, remote_port.to_i)
         server.send(data, remote)
-      rescue error : Errno
-        if error.errno == Errno::ECONNREFUSED
-          logger.info "remote may not be listening #{error.inspect_with_backtrace}", " server_protocol=udp server_port=#{server_port} remote_ip=#{remote_ip} remote_port=#{remote_port}"
-        else
-          raise error
-        end
+      rescue error : Socket::ConnectError
+        # https://crystal-lang.org/api/0.34.0/UDPSocket.html
+        logger.info "remote may not be listening #{error.inspect_with_backtrace}", " server_protocol=udp server_port=#{server_port} remote_ip=#{remote_ip} remote_port=#{remote_port}"
       end
     end
   end
@@ -113,6 +110,5 @@ class Listeners
       interested.each(&.io_callback(message))
     end
   rescue IO::Error
-  rescue Errno
   end
 end
