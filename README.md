@@ -8,6 +8,11 @@ This allows engine drivers to register new servers for devices that might connec
 * The details of the clients and data is then streamed to the drivers.
 * Servers are only opened if there is a driver listening and ports are closed otherwise.
 
+## ENV Vars
+
+* `PLACE_SERVER_SECRET` = shared bearer token for driver auth
+* `SG_ENV` = set to `production` for production log levels
+
 ## Usage
 
 There are two websocket endpoints one for TCP and one for UDP
