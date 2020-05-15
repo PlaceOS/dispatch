@@ -1,6 +1,8 @@
 require "./server_manager"
 
 class Listeners
+  Log = ::App::Log.for("listeners")
+
   @@udp_tracking = Hash(Int32, Hash(String, Array(Session))).new do |hash, key|
     hash[key] = Hash(String, Array(Session)).new { |h, k| h[k] = [] of Session }
   end
@@ -21,15 +23,11 @@ class Listeners
     engine_listeners
   end
 
-  def self.logger
-    ActionController::Base.settings.logger
-  end
-
   def self.open_udp_server(port : Int32, session : Session)
     sessions = @@udp_tracking[port]
 
     if sessions.empty?
-      logger.info "opening UDP server on #{port}", " server_protocol=udp server_port=#{port}"
+      Log.info { {message: "opening UDP server on #{port}", server_protocol: "udp", server_port: port.to_s} }
       server = UDPSocket.new
       server.bind("0.0.0.0", port)
       @@udp_servers[port] = server
@@ -48,7 +46,7 @@ class Listeners
         server.send(data, remote)
       rescue error : Socket::ConnectError
         # https://crystal-lang.org/api/0.34.0/UDPSocket.html
-        logger.info "remote may not be listening #{error.inspect_with_backtrace}", " server_protocol=udp server_port=#{server_port} remote_ip=#{remote_ip} remote_port=#{remote_port}"
+        Log.info(exception: error) { {message: "remote may not be listening #{error.inspect_with_backtrace}", server_protocol: "udp", server_port: server_port.to_s, remote_ip: remote_ip, remote_port: remote_port.to_s} }
       end
     end
   end
@@ -75,7 +73,7 @@ class Listeners
         @@udp_tracking.delete(port)
         server = @@udp_servers.delete(port)
 
-        logger.info "closing UDP server on #{port}", " server_protocol=udp server_port=#{port}"
+        Log.info { {message: "closing UDP server on #{port}", server_protocol: "udp", server_port: port.to_s} }
         server.try &.close
       end
     end
@@ -93,7 +91,7 @@ class Listeners
       remote_ip = client_addr.address
       interested = sessions[remote_ip]?
       if interested.nil? || interested.empty?
-        logger.warn "ignoring UDP data from #{remote_ip} on #{port}", " server_protocol=udp server_port=#{port} remote_ip=#{remote_ip} accepted=false"
+        Log.warn { {message: "ignoring UDP data from #{remote_ip} on #{port}", server_protocol: "udp", server_port: port.to_s, remote_ip: remote_ip, accepted: "false"} }
         next
       end
 

@@ -1,17 +1,23 @@
 # Application dependencies
 require "action-controller"
 require "active-model"
-PROD = ENV["SG_ENV"]? == "production"
+require "./constants"
+require "log_helper"
 
-# Allows request IDs to be configured for logging
-# You can extend this with additional properties
-ActionController::Logger.add_tag client_ip
-ActionController::Logger.add_tag request_id
-ActionController::Logger.add_tag event_source
+# Configure logging (backend defined in constants.cr)
+if App.running_in_production?
+  log_level = Log::Severity::Info
+  Log.builder.bind "*", :warning, App::LOG_BACKEND
+else
+  log_level = Log::Severity::Debug
+  Log.builder.bind "*", :info, App::LOG_BACKEND
+end
+Log.builder.bind "action-controller.*", log_level, App::LOG_BACKEND
+Log.builder.bind "#{App::NAME}.*", log_level, App::LOG_BACKEND
 
-filter_params = ["bearer_token", "password"]
-logger = ActionController::Base.settings.logger
-logger.level = PROD ? Logger::INFO : Logger::DEBUG
+# Filter out sensitive params that shouldn't be logged
+filter_params = ["password", "bearer_token"]
+keeps_headers = ["X-Request-ID"]
 
 # Application code
 require "./controllers/application"
@@ -23,19 +29,6 @@ require "action-controller/server"
 
 # Add handlers that should run before your application
 ActionController::Server.before(
-  HTTP::ErrorHandler.new(!PROD),
-  ActionController::LogHandler.new(filter_params),
-  HTTP::CompressHandler.new
+  ActionController::ErrorHandler.new(App.running_in_production?, keeps_headers),
+  ActionController::LogHandler.new(filter_params)
 )
-
-# Configure session cookies
-# NOTE:: Change these from defaults
-ActionController::Session.configure do |settings|
-  settings.key = ENV["COOKIE_SESSION_KEY"]? || "_spider_gazelle_"
-  settings.secret = ENV["COOKIE_SESSION_SECRET"]? || "4f74c0b358d5bab4000dd3c75465dc2c"
-  # HTTPS only:
-  settings.secure = PROD
-end
-
-APP_NAME = "Server-Dispatch"
-VERSION  = "1.0.0"

@@ -8,9 +8,9 @@ class Dispatcher < Application
     port = params["port"].to_u32.to_i
     ip_addresses = params["accept"].split(",")
 
-    logger.tag "new TCP server requested", server_protocol: "tcp", server_port: port, accepting: ip_addresses
+    Log.info { {server_protocol: "tcp", server_port: port, accepting: ip_addresses, message: "new TCP server requested"} }
 
-    session = Session.new(true, port, ws, ip_addresses, logger)
+    session = Session.new(true, port, ws, ip_addresses)
     Servers.open_tcp_server(port, session.configure_websocket)
     ws.on_close { Servers.close_tcp_server(port, session) }
   end
@@ -19,9 +19,9 @@ class Dispatcher < Application
     port = params["port"].to_u32.to_i
     ip_addresses = params["accept"].split(",")
 
-    logger.tag "new UDP server requested", server_protocol: "udp", server_port: port, accepting: ip_addresses
+    Log.info { {server_protocol: "udp", server_port: port, accepting: ip_addresses, message: "new UDP server requested"} }
 
-    session = Session.new(false, port, ws, ip_addresses, logger)
+    session = Session.new(false, port, ws, ip_addresses)
     Listeners.open_udp_server(port, session.configure_websocket)
     ws.on_close { Listeners.close_udp_server(port, session) }
   end

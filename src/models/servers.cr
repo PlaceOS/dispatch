@@ -1,6 +1,8 @@
 require "./server_manager"
 
 class Servers
+  Log = ::App::Log.for("servers")
+
   # port => {"remote ip" => [session_instance]}
   @@tcp_tracking = Hash(Int32, Hash(String, Array(Session))).new do |hash, key|
     hash[key] = Hash(String, Array(Session)).new { |h, k| h[k] = [] of Session }
@@ -25,15 +27,11 @@ class Servers
     {engine_listeners, server_clients}
   end
 
-  def self.logger
-    ActionController::Base.settings.logger
-  end
-
   def self.open_tcp_server(port : Int32, session : Session)
     sessions = @@tcp_tracking[port]
 
     if sessions.empty?
-      logger.info "opening TCP server on #{port}", " server_protocol=tcp server_port=#{port}"
+      Log.info { {server_protocol: "tcp", server_port: port.to_s, message: "opening TCP server on #{port}"} }
       server = TCPServer.new("0.0.0.0", port)
       manager = TCPServerManager.new(server)
       @@tcp_servers[port] = manager
@@ -105,7 +103,7 @@ class Servers
         @@tcp_tracking.delete(port)
         @@tcp_servers.delete(port)
 
-        logger.info "closing TCP server on #{port}", " server_protocol=tcp server_port=#{port}"
+        Log.info { {message: "closing TCP server on #{port}", server_protocol: "tcp", server_port: port.to_s} }
         manager.close
       end
     end
@@ -126,11 +124,11 @@ class Servers
     # Check if we are interested in this connection
     interested = sessions[remote_ip]?
     if interested.nil? || interested.empty?
-      logger.warn "rejected connection TCP #{remote_ip} on #{port}", " server_protocol=tcp server_port=#{port} remote_ip=#{remote_ip} accepted=false"
+      Log.warn { {message: "rejected connection TCP #{remote_ip} on #{port}", server_protocol: "tcp", server_port: port.to_s, remote_ip: remote_ip, accepted: "false"} }
       client.close
       return
     end
-    logger.info "accepted connection TCP #{remote_ip} on #{port}", " server_protocol=tcp server_port=#{port} remote_ip=#{remote_ip} accepted=true"
+    Log.info { {message: "accepted connection TCP #{remote_ip} on #{port}", server_protocol: "tcp", server_port: port.to_s, remote_ip: remote_ip, accepted: "true"} }
 
     # Configure the connection
     client.tcp_keepalive_idle = 10

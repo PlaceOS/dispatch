@@ -1,10 +1,10 @@
 require "option_parser"
-require "./config"
+require "./constants"
 
 # Server defaults
-port = (ENV["SG_SERVER_PORT"]? || 3000).to_i
-host = ENV["SG_SERVER_HOST"]? || "127.0.0.1"
-process_count = (ENV["SG_PROCESS_COUNT"]? || 1).to_i
+port = App::DEFAULT_PORT
+host = App::DEFAULT_HOST
+process_count = App::DEFAULT_PROCESS_COUNT
 
 # Command line options
 OptionParser.parse(ARGV.dup) do |parser|
@@ -23,7 +23,7 @@ OptionParser.parse(ARGV.dup) do |parser|
   end
 
   parser.on("-v", "--version", "Display the application version") do
-    puts "#{APP_NAME} v#{VERSION}"
+    puts "#{App::NAME} v#{App::VERSION}"
     exit 0
   end
 
@@ -46,7 +46,11 @@ OptionParser.parse(ARGV.dup) do |parser|
 end
 
 # Load the routes
-puts "Launching #{APP_NAME} v#{VERSION}"
+puts "Launching #{App::NAME} v#{App::VERSION}"
+
+# Requiring config here ensures that the option parser runs before
+# attempting to connect to databases etc.
+require "./config"
 server = ActionController::Server.new(port, host)
 
 # (process_count < 1) == `System.cpu_count` but this is not always accurate
@@ -60,15 +64,15 @@ terminate = Proc(Signal, Nil).new do |signal|
 end
 
 # Detect ctr-c to shutdown gracefully
-Signal::INT.trap &terminate
 # Docker containers use the term signal
+Signal::INT.trap &terminate
 Signal::TERM.trap &terminate
 
 # Allow signals to change the log level at run-time
 logging = Proc(Signal, Nil).new do |signal|
-  level = signal.usr1? ? Logger::DEBUG : Logger::INFO
+  level = signal.usr1? ? Log::Severity::Debug : Log::Severity::Info
   puts " > Log level changed to #{level}"
-  ActionController::Base.settings.logger.level = level
+  Log.builder.bind "#{App::NAME}.*", level, App::LOG_BACKEND
   signal.ignore
 end
 
@@ -83,4 +87,4 @@ server.run do
 end
 
 # Shutdown message
-puts "#{APP_NAME} leaps through the veldt\n"
+puts "#{App::NAME} leaps through the veldt\n"

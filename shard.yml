@@ -1,16 +1,17 @@
-name: app
+name: dispatch
 version: 1.0.0
 
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
-    version: "~> 2.0"
   active-model:
     github: spider-gazelle/active-model
-  tasker:
-    github: spider-gazelle/tasker
+  log_helper:
+    github: spider-gazelle/log_helper
   bindata:
     github: spider-gazelle/bindata
+  tasker:
+    github: spider-gazelle/tasker
 
 development_dependencies:
   ameba:

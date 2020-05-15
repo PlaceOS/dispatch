@@ -3,6 +3,8 @@ require "bindata"
 require "socket"
 
 class Session
+  Log = ::App::Log.for("session")
+
   class Protocol < BinData
     endian big
 
@@ -22,7 +24,7 @@ class Session
   end
 
   # Binary protocol: signal, remote_ip, client_id, size, data
-  def initialize(@tcp_transport : Bool, @server_port : Int32, @websocket : HTTP::WebSocket, @tracking : Array(String), @logger : Logger = Logger.new(STDOUT))
+  def initialize(@tcp_transport : Bool, @server_port : Int32, @websocket : HTTP::WebSocket, @tracking : Array(String))
     @connections = Hash(String, Array(UInt64)).new do |h, k|
       h[k] = [] of UInt64
     end
@@ -47,7 +49,7 @@ class Session
     when Protocol::MessageType::CLOSE
       Servers.close_client_connection(@server_port, message.ip_address, message.id_or_port)
     else
-      @logger.warn "unexpected message type received #{message.message}"
+      Log.warn { "unexpected message type received #{message.message}" }
     end
   end
 
@@ -58,7 +60,7 @@ class Session
     when Protocol::MessageType::WRITE
       Listeners.send_client_data(@server_port, message.ip_address, message.id_or_port, message.data)
     else
-      @logger.warn "unexpected message type received #{message.message}"
+      Log.warn { "unexpected message type received #{message.message}" }
     end
   end
 
