@@ -10,6 +10,8 @@ dependencies:
     github: spider-gazelle/log_helper
   bindata:
     github: spider-gazelle/bindata
+  secrets-env:
+    github: place-labs/secrets-env
   tasker:
     github: spider-gazelle/tasker
 

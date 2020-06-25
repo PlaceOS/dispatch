@@ -39,10 +39,8 @@ class Dispatcher < Application
     }
   end
 
-  AUTH_SECRET = ENV["PLACE_SERVER_SECRET"]? || ENV["SERVER_SECRET"]? || "testing"
-
   def authenticate
-    head :unauthorized unless acquire_token == AUTH_SECRET
+    head :unauthorized unless acquire_token == App::AUTH_SECRET
   end
 
   def acquire_token : String?

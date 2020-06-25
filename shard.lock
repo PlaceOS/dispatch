@@ -10,11 +10,11 @@ shards:
 
   ameba:
     git: https://github.com/veelenga/ameba.git
-    version: 0.12.1
+    version: 0.13.0
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 1.5.4
+    version: 1.5.5
 
   bisect:
     git: https://github.com/spider-gazelle/bisect.git
@@ -43,6 +43,10 @@ shards:
   log_helper:
     git: https://github.com/spider-gazelle/log_helper.git
     version: 1.0.2
+
+  secrets-env:
+    git: https://github.com/place-labs/secrets-env.git
+    version: 1.0.0
 
   tasker:
     git: https://github.com/spider-gazelle/tasker.git

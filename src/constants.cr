@@ -1,4 +1,5 @@
 require "action-controller/logger"
+require "secrets-env"
 
 module App
   NAME    = "Dispatch"
@@ -6,6 +7,8 @@ module App
 
   Log         = ::Log.for(NAME)
   LOG_BACKEND = ActionController.default_backend
+
+  AUTH_SECRET = ENV["PLACE_SERVER_SECRET"]? || ENV["SERVER_SECRET"]? || "testing"
 
   ENVIRONMENT = ENV["SG_ENV"]? || "development"
 
