@@ -2,7 +2,7 @@ version: 2.0
 shards:
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 3.1.6
+    version: 3.3.0
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
@@ -24,17 +24,13 @@ shards:
     git: https://github.com/kostya/cron_parser.git
     version: 0.3.0
 
-  delimiter_tree:
-    git: https://github.com/drujensen/delimiter_tree.git
-    version: 0.1.4
-
   future:
     git: https://github.com/crystal-community/future.cr.git
     version: 0.1.0
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
-    version: 0.4.3
+    version: 0.4.4
 
   json_mapping:
     git: https://github.com/crystal-lang/json_mapping.cr.git
@@ -43,6 +39,10 @@ shards:
   log_helper:
     git: https://github.com/spider-gazelle/log_helper.git
     version: 1.0.2
+
+  lucky_router:
+    git: https://github.com/luckyframework/lucky_router.git
+    version: 0.3.0
 
   secrets-env:
     git: https://github.com/place-labs/secrets-env.git
