@@ -16,14 +16,6 @@ shards:
     git: https://github.com/spider-gazelle/bindata.git
     version: 1.5.5
 
-  bisect:
-    git: https://github.com/spider-gazelle/bisect.git
-    version: 1.2.0
-
-  cron_parser:
-    git: https://github.com/kostya/cron_parser.git
-    version: 0.3.0
-
   future:
     git: https://github.com/crystal-community/future.cr.git
     version: 0.1.0
@@ -47,10 +39,6 @@ shards:
   secrets-env:
     git: https://github.com/place-labs/secrets-env.git
     version: 1.0.0
-
-  tasker:
-    git: https://github.com/spider-gazelle/tasker.git
-    version: 1.3.0
 
   yaml_mapping:
     git: https://github.com/crystal-lang/yaml_mapping.cr.git

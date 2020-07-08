@@ -12,8 +12,6 @@ dependencies:
     github: spider-gazelle/bindata
   secrets-env:
     github: place-labs/secrets-env
-  tasker:
-    github: spider-gazelle/tasker
 
 development_dependencies:
   ameba:
