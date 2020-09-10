@@ -2,7 +2,12 @@ require "../models/session"
 
 class Dispatcher < Application
   base "/api/server"
-  before_action :authenticate
+
+  before_action :authenticate, except: :healthcheck
+
+  get "/healthz", :healthcheck do
+    head :ok
+  end
 
   ws "/tcp_dispatch" do |ws|
     port = params["port"].to_u32.to_i

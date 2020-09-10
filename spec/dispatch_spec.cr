@@ -2,6 +2,11 @@ require "./spec_helper"
 
 describe Dispatcher do
   with_server do
+    it "should healthcheck" do
+      result = curl("GET", "/api/server/healthz")
+      result.status_code.should eq 200
+    end
+
     it "should open a new server and receive events" do
       received_open = false
       received_msg = ""
