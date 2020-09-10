@@ -33,5 +33,5 @@ COPY --from=0 /usr/share/zoneinfo/ /usr/share/zoneinfo/
 # Run the app binding on port 8080
 EXPOSE 8080
 ENTRYPOINT ["/dispatch"]
-HEALTHCHECK CMD ["/dispatch", "-c", "http://127.0.0.1:8080/"]
+HEALTHCHECK CMD ["/dispatch", "-c", "http://127.0.0.1:8080/api/server/healthz"]
 CMD ["/dispatch", "-b", "0.0.0.0", "-p", "8080"]
