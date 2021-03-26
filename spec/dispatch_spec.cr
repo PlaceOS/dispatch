@@ -71,7 +71,7 @@ describe Dispatcher do
             message.data = "reply".to_slice
             msg = message.to_slice
 
-            socket.stream(true, msg.size) { |stream| stream.write msg }
+            socket.stream(true, msg.size, &.write(msg))
           when Session::Protocol::MessageType::CLOSED
             received_close = true
           else
