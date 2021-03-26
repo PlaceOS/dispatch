@@ -1,4 +1,5 @@
 FROM crystallang/crystal:1.0.0-alpine
+RUN apk add --update yaml-static
 
 WORKDIR /app
 
