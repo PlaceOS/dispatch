@@ -1,4 +1,4 @@
-FROM crystallang/crystal:0.35.1-alpine
+FROM crystallang/crystal:1.0.0-alpine
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY shard.yml shard.yml
 COPY shard.lock shard.lock
 
-RUN shards install --production
+RUN shards install --production --ignore-crystal-version
 
 # Add src
 COPY ./src /app/src
