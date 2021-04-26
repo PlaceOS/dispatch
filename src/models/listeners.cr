@@ -97,7 +97,7 @@ class Listeners
 
       client_port = client_addr.port.to_u64
 
-      data = raw_data[0, bytes_read]
+      data = raw_data[0, bytes_read].dup
       message = Session::Protocol.new
       message.message = Session::Protocol::MessageType::RECEIVED
       message.ip_address = remote_ip

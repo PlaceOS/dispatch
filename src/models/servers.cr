@@ -153,7 +153,7 @@ class Servers
         bytes_read = client.read(raw_data)
         break if bytes_read == 0 # IO was closed
 
-        data = raw_data[0, bytes_read]
+        data = raw_data[0, bytes_read].dup
         message = Session::Protocol.new
         message.message = Session::Protocol::MessageType::RECEIVED
         message.ip_address = remote_ip
