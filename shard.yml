@@ -1,23 +1,32 @@
 name: dispatch
-version: 1.1.0
+version: 1.1.1
+crystal: ~> 1.0
+
+targets:
+  app:
+    main: src/app.cr
 
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
+    version: ~> 4.4
+
   active-model:
     github: spider-gazelle/active-model
-  log_helper:
-    github: spider-gazelle/log_helper
+
   bindata:
     github: spider-gazelle/bindata
+
+  log_helper:
+    github: spider-gazelle/log_helper
+
+  placeos-log-backend:
+    github: place-labs/log-backend
+
   secrets-env:
     github: place-labs/secrets-env
 
 development_dependencies:
   ameba:
-    github: veelenga/ameba
-
-# compile target
-targets:
-  app:
-    main: src/app.cr
+    github: crystal-ameba/ameba
+    version: ~> 0.14

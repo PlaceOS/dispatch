@@ -1,4 +1,5 @@
 require "option_parser"
+
 require "./constants"
 
 # Server defaults
@@ -51,6 +52,7 @@ puts "Launching #{App::NAME} v#{App::VERSION}"
 # Requiring config here ensures that the option parser runs before
 # attempting to connect to databases etc.
 require "./config"
+
 server = ActionController::Server.new(port, host)
 
 # (process_count < 1) == `System.cpu_count` but this is not always accurate
@@ -67,19 +69,6 @@ end
 # Docker containers use the term signal
 Signal::INT.trap &terminate
 Signal::TERM.trap &terminate
-
-# Allow signals to change the log level at run-time
-logging = Proc(Signal, Nil).new do |signal|
-  level = signal.usr1? ? Log::Severity::Debug : Log::Severity::Info
-  puts " > Log level changed to #{level}"
-  Log.builder.bind "#{App::NAME}.*", level, App::LOG_BACKEND
-  signal.ignore
-end
-
-# Turn on DEBUG level logging `kill -s USR1 %PID`
-# Default production log levels (INFO and above) `kill -s USR2 %PID`
-Signal::USR1.trap &logging
-Signal::USR2.trap &logging
 
 # Start the server
 server.run do
