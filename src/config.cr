@@ -1,19 +1,9 @@
 # Application dependencies
 require "action-controller"
 require "active-model"
-require "./constants"
-require "log_helper"
 
-# Configure logging (backend defined in constants.cr)
-if App.running_in_production?
-  log_level = Log::Severity::Info
-  Log.setup "*", :warn, App::LOG_BACKEND
-else
-  log_level = Log::Severity::Debug
-  Log.setup "*", :info, App::LOG_BACKEND
-end
-Log.builder.bind "action-controller.*", log_level, App::LOG_BACKEND
-Log.builder.bind "#{App::NAME}.*", log_level, App::LOG_BACKEND
+require "./constants"
+require "./logging"
 
 # Filter out sensitive params that shouldn't be logged
 filter_params = ["password", "bearer_token"]
