@@ -1,6 +1,7 @@
 # Server Dispatch
 
-[![Build Status](https://travis-ci.org/aca-labs/crystal-engine-server-dispatch.svg?branch=master)](https://travis-ci.org/aca-labs/crystal-engine-server-dispatch)
+[![Build Dev Image](https://github.com/PlaceOS/dispatch/actions/workflows/build-dev-image.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/build-dev-image.yml)
+[![CI](https://github.com/PlaceOS/dispatch/actions/workflows/ci.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/ci.yml)
 
 This allows engine drivers to register new servers for devices that might connect to engine vs engine connecting to devices.
 
