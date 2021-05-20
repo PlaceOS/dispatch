@@ -1,5 +1,6 @@
 FROM crystallang/crystal:1.0.0-alpine
-RUN apk add --update yaml-static
+
+RUN apk add --no-cache yaml-static
 
 WORKDIR /app
 
@@ -7,7 +8,7 @@ WORKDIR /app
 COPY shard.yml shard.yml
 COPY shard.lock shard.lock
 
-RUN shards install --production --ignore-crystal-version
+RUN shards install --production
 
 # Add src
 COPY ./src /app/src
