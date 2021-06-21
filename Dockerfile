@@ -1,5 +1,7 @@
 FROM crystallang/crystal:1.0.0-alpine
 
+ARG PLACE_COMMIT="DEV"
+
 RUN apk add --no-cache yaml-static
 
 WORKDIR /app
@@ -8,14 +10,15 @@ WORKDIR /app
 COPY shard.yml shard.yml
 COPY shard.lock shard.lock
 
-RUN shards install --production
+RUN shards install --production --ignore-crystal-version
 
 # Add src
 COPY ./src /app/src
 
 # Build application
 ENV UNAME_AT_COMPILE_TIME=true
-RUN crystal build --release --debug --error-trace /app/src/app.cr -o dispatch
+RUN PLACE_COMMIT=$PLACE_COMMIT \
+    crystal build --release --no-debug --error-trace /app/src/app.cr -o dispatch
 
 # Extract dependencies
 RUN ldd dispatch | tr -s '[:blank:]' '\n' | grep '^/' | \
@@ -31,6 +34,7 @@ COPY --from=0 /etc/hosts /etc/hosts
 
 # This is required for Timezone support
 COPY --from=0 /usr/share/zoneinfo/ /usr/share/zoneinfo/
+
 
 # Run the app binding on port 8080
 EXPOSE 8080

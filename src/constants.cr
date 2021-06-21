@@ -2,10 +2,12 @@ require "action-controller/logger"
 require "secrets-env"
 
 module App
-  NAME    = "Dispatch"
-  VERSION = {{ `shards version "#{__DIR__}"`.chomp.stringify.downcase }}
+  APP_NAME     = "Dispatch"
+  VERSION      = {{ `shards version "#{__DIR__}"`.chomp.stringify.downcase }}
+  BUILD_TIME   = {{ system("date -u").stringify }}
+  BUILD_COMMIT = {{ env("PLACE_COMMIT") || "DEV" }}
 
-  Log         = ::Log.for(NAME)
+  Log         = ::Log.for(APP_NAME)
   LOG_BACKEND = ActionController.default_backend
 
   AUTH_SECRET = ENV["PLACE_SERVER_SECRET"]? || ENV["SERVER_SECRET"]? || "testing"
