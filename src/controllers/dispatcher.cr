@@ -1,12 +1,23 @@
 require "../models/session"
+require "placeos-models/version"
+require "../constants"
 
 class Dispatcher < Application
   base "/api/server"
 
-  before_action :authenticate, except: :healthcheck
+  before_action :authenticate, except: [:healthcheck, :version]
 
   get "/healthz", :healthcheck do
     head :ok
+  end
+
+  get "/version", :version do
+    render :ok, json: PlaceOS::Model::Version.new(
+      version: App::VERSION,
+      build_time: App::BUILD_TIME,
+      commit: App::BUILD_COMMIT,
+      service: App::APP_NAME
+    )
   end
 
   ws "/tcp_dispatch" do |ws|

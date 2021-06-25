@@ -30,6 +30,6 @@ jobs:
         with:
           crystal: ${{ matrix.crystal }}
       - uses: actions/checkout@v2
-      - run: shards install
+      - run: shards install --ignore-crystal-version
       - run: crystal spec --error-trace -v --order=random
 

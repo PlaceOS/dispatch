@@ -1,8 +1,12 @@
 version: 2.0
 shards:
+  CrystalEmail:
+    git: https://github.com/nephos/crystalemail.git
+    version: 0.2.4
+
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 4.4.1
+    version: 4.5.0
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
@@ -15,6 +19,10 @@ shards:
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
     version: 1.9.0
+
+  db:
+    git: https://github.com/crystal-lang/crystal-db.git
+    version: 0.10.1
 
   future:
     git: https://github.com/crystal-community/future.cr.git
@@ -32,6 +40,10 @@ shards:
     git: https://github.com/crystal-lang/json_mapping.cr.git
     version: 0.1.1
 
+  jwt:
+    git: https://github.com/crystal-community/jwt.git
+    version: 1.5.1
+
   log_helper:
     git: https://github.com/spider-gazelle/log_helper.git
     version: 1.0.3
@@ -40,9 +52,33 @@ shards:
     git: https://github.com/luckyframework/lucky_router.git
     version: 0.4.2
 
+  neuroplastic:
+    git: https://github.com/spider-gazelle/neuroplastic.git
+    version: 1.7.1
+
+  openssl_ext:
+    git: https://github.com/spider-gazelle/openssl_ext.git
+    version: 2.1.4
+
   placeos-log-backend:
     git: https://github.com/place-labs/log-backend.git
     version: 0.4.0
+
+  placeos-models:
+    git: https://github.com/placeos/models.git
+    version: 5.5.0
+
+  rethinkdb:
+    git: https://github.com/kingsleyh/crystal-rethinkdb.git
+    version: 0.2.3
+
+  rethinkdb-orm:
+    git: https://github.com/spider-gazelle/rethinkdb-orm.git
+    version: 4.1.0
+
+  retriable:
+    git: https://github.com/sija/retriable.cr.git
+    version: 0.2.3
 
   secrets-env:
     git: https://github.com/place-labs/secrets-env.git

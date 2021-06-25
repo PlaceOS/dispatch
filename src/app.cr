@@ -24,7 +24,7 @@ OptionParser.parse(ARGV.dup) do |parser|
   end
 
   parser.on("-v", "--version", "Display the application version") do
-    puts "#{App::NAME} v#{App::VERSION}"
+    puts "#{App::APP_NAME} v#{App::VERSION}"
     exit 0
   end
 
@@ -47,7 +47,7 @@ OptionParser.parse(ARGV.dup) do |parser|
 end
 
 # Load the routes
-puts "Launching #{App::NAME} v#{App::VERSION}"
+puts "Launching #{App::APP_NAME} v#{App::VERSION}"
 
 # Requiring config here ensures that the option parser runs before
 # attempting to connect to databases etc.
@@ -76,4 +76,4 @@ server.run do
 end
 
 # Shutdown message
-puts "#{App::NAME} leaps through the veldt\n"
+puts "#{App::APP_NAME} leaps through the veldt\n"
