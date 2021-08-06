@@ -70,3 +70,7 @@ Statistics are available via a `GET` request
 }
 
 ```
+
+## Deployment
+
+When deployed in the cloud, one can configure K8s load balancer to forward data coming in on required ports to Dispatch.
