@@ -42,7 +42,7 @@ shards:
 
   jwt:
     git: https://github.com/crystal-community/jwt.git
-    version: 1.5.1
+    version: 1.6.0
 
   log_helper:
     git: https://github.com/spider-gazelle/log_helper.git
@@ -66,15 +66,15 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 5.7.3
+    version: 5.10.0
 
   rethinkdb:
     git: https://github.com/kingsleyh/crystal-rethinkdb.git
-    version: 0.2.3
+    version: 0.3.0
 
   rethinkdb-orm:
     git: https://github.com/spider-gazelle/rethinkdb-orm.git
-    version: 4.2.0
+    version: 5.0.1
 
   retriable:
     git: https://github.com/sija/retriable.cr.git
