@@ -1,4 +1,5 @@
-FROM crystallang/crystal:1.1.1-alpine
+ARG CRYSTAL_VERSION=1.1.1
+FROM crystallang/crystal:${CRYSTAL_VERSION}-alpine as build
 
 ARG PLACE_COMMIT="DEV"
 ARG PLACE_VERSION="DEV"
@@ -30,12 +31,12 @@ RUN ldd dispatch | tr -s '[:blank:]' '\n' | grep '^/' | \
 FROM scratch
 WORKDIR /
 ENV PATH=$PATH:/
-COPY --from=0 /app/deps /
-COPY --from=0 /app/dispatch /dispatch
-COPY --from=0 /etc/hosts /etc/hosts
+COPY --from=build /app/deps /
+COPY --from=build /app/dispatch /dispatch
+COPY --from=build /etc/hosts /etc/hosts
 
 # This is required for Timezone support
-COPY --from=0 /usr/share/zoneinfo/ /usr/share/zoneinfo/
+COPY --from=build /usr/share/zoneinfo/ /usr/share/zoneinfo/
 
 
 # Run the app binding on port 8080
