@@ -21,7 +21,7 @@ COPY ./src /app/src
 ENV UNAME_AT_COMPILE_TIME=true
 RUN PLACE_COMMIT=$PLACE_COMMIT \
     PLACE_VERSION=$PLACE_VERSION \
-    crystal build --release --no-debug --error-trace /app/src/app.cr -o dispatch
+    crystal build --release --error-trace -o dispatch /app/src/app.cr
 
 # Extract dependencies
 RUN ldd dispatch | tr -s '[:blank:]' '\n' | grep '^/' | \
