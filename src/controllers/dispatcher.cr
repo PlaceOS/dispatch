@@ -3,7 +3,7 @@ require "placeos-models/version"
 require "../constants"
 
 class Dispatcher < Application
-  base "/api/server"
+  base "/api/dispatch/v1"
 
   before_action :authenticate, except: [:healthcheck, :version]
 
