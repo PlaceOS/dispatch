@@ -18,8 +18,8 @@ This allows engine drivers to register new servers for devices that might connec
 
 There are two websocket endpoints one for TCP and one for UDP
 
-* `/api/server/tcp_dispatch`
-* `/api/server/udp_dispatch`
+* `/api/dispatch/v1/tcp_dispatch`
+* `/api/dispatch/v1/udp_dispatch`
 
 The query string should include the
 
@@ -28,7 +28,7 @@ The query string should include the
 * `accept` a comma delimited list of client IP addresses that are expected to connect to the server
 
 ```
-WS /api/server/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1
+WS /api/dispatch/v1/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1
 ```
 
 The websocket only communicates over `BINARY` frames and has the following message types:

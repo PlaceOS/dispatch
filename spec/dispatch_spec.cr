@@ -4,12 +4,12 @@ require "placeos-models/version"
 describe Dispatcher do
   with_server do
     it "should healthcheck" do
-      result = curl("GET", "/api/server/healthz")
+      result = curl("GET", "/api/dispatch/v1/healthz")
       result.status_code.should eq 200
     end
 
     it "should check version" do
-      result = curl("GET", "/api/server/version")
+      result = curl("GET", "/api/dispatch/v1/version")
       result.status_code.should eq 200
       PlaceOS::Model::Version.from_json(result.body).service.should eq "Dispatch"
     end
@@ -19,7 +19,7 @@ describe Dispatcher do
       received_msg = ""
       received_close = false
 
-      new_websocket("/api/server/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1") do |socket|
+      new_websocket("/api/dispatch/v1/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1") do |socket|
         socket.on_binary do |data|
           io = IO::Memory.new(data)
           message = io.read_bytes(Session::Protocol)
@@ -58,7 +58,7 @@ describe Dispatcher do
       sent_msg = ""
       middle_stats = nil
 
-      new_websocket("/api/server/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1") do |socket|
+      new_websocket("/api/dispatch/v1/tcp_dispatch?bearer_token=testing&port=6001&accept=127.0.0.1") do |socket|
         socket.on_binary do |data|
           io = IO::Memory.new(data)
           message = io.read_bytes(Session::Protocol)
@@ -70,7 +70,7 @@ describe Dispatcher do
             received_msg = String.new(message.data)
 
             # Grab the stats here
-            result = curl("GET", "/api/server?bearer_token=testing")
+            result = curl("GET", "/api/dispatch/v1?bearer_token=testing")
             middle_stats = JSON.parse(result.body)
 
             # Send a reply back
@@ -99,7 +99,7 @@ describe Dispatcher do
         sleep 1
       end
 
-      result = curl("GET", "/api/server?bearer_token=testing")
+      result = curl("GET", "/api/dispatch/v1?bearer_token=testing")
       after_stats = JSON.parse(result.body)
       running_stats = middle_stats.not_nil!
 
