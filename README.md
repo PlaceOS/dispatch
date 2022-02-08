@@ -1,6 +1,6 @@
 # Server Dispatch
 
-[![Build Dev Image](https://github.com/PlaceOS/dispatch/actions/workflows/build-dev-image.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/build-dev-image.yml)
+[![Build](https://github.com/PlaceOS/dispatch/actions/workflows/build.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/build.yml)
 [![CI](https://github.com/PlaceOS/dispatch/actions/workflows/ci.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/ci.yml)
 
 This allows engine drivers to register new servers for devices that might connect to engine vs engine connecting to devices.
