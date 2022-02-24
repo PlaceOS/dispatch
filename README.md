@@ -2,6 +2,8 @@
 
 [![Build](https://github.com/PlaceOS/dispatch/actions/workflows/build.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/build.yml)
 [![CI](https://github.com/PlaceOS/dispatch/actions/workflows/ci.yml/badge.svg)](https://github.com/PlaceOS/dispatch/actions/workflows/ci.yml)
+[![Changelog](https://img.shields.io/badge/Changelog-available-github.svg)](/CHANGELOG.md)
+
 
 This allows engine drivers to register new servers for devices that might connect to engine vs engine connecting to devices.
 
@@ -74,3 +76,7 @@ Statistics are available via a `GET` request
 ## Deployment
 
 When deployed in the cloud, one can configure K8s load balancer to forward data coming in on required ports to Dispatch.
+
+## Contributing
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
