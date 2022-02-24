@@ -1,8 +1,10 @@
+## Unreleased
+
 ## v1.2.1 (2022-02-24)
 
 ### Refactor
 
-- central build ci (#11)
+- central build ci ([#11](https://github.com/PlaceOS/dispatch/pull/11))
 
 ## v1.2.0 (2021-10-11)
 
