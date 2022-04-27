@@ -2,7 +2,7 @@ require "action-controller/logger"
 require "secrets-env"
 
 module App
-  APP_NAME     = "Dispatch"
+  APP_NAME     = "dispatch"
   VERSION      = {{ `shards version "#{__DIR__}"`.chomp.stringify.downcase }}
   BUILD_TIME   = {{ system("date -u").stringify }}
   BUILD_COMMIT = {{ env("PLACE_COMMIT") || "DEV" }}
