@@ -14,6 +14,9 @@ require "./controllers/application"
 require "./controllers/*"
 require "./models/*"
 
+# Require telemetry after application code
+require "./telemetry"
+
 # Server required after application controllers
 require "action-controller/server"
 

@@ -1,5 +1,4 @@
 require "placeos-log-backend"
-require "placeos-log-backend/telemetry"
 
 require "./constants"
 
@@ -29,10 +28,5 @@ module App::Logging
     production: App.running_in_production?,
     namespaces: namespaces,
     backend: log_backend,
-  )
-
-  PlaceOS::LogBackend.configure_opentelemetry(
-    service_name: APP_NAME,
-    service_version: VERSION,
   )
 end
