@@ -10,6 +10,7 @@ WORKDIR /app
 
 # Install shards for caching
 COPY shard.yml shard.yml
+COPY shard.override.yml shard.override.yml
 COPY shard.lock shard.lock
 
 RUN shards install --production --ignore-crystal-version
