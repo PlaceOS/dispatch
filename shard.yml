@@ -26,6 +26,7 @@ dependencies:
 
   placeos-log-backend:
     github: place-labs/log-backend
+    version: ">= 0.8.9"
 
   secrets-env:
     github: place-labs/secrets-env
