@@ -1,0 +1,331 @@
+---
+openapi: 3.0.3
+info:
+  description: PlaceOS Dispatch Service. Routes incoming protocol data to drivers
+    that have registered their interest
+  title: dispatch
+  version: 1.4.2
+paths:
+  /api/dispatch/v1:
+    get:
+      summary: Returns details about open servers and number of engine drivers listening.
+      description: 'Returns details about open servers and number of engine drivers
+        listening.
+
+        Also returns details about the number of TCP client connections to the servers'
+      tags:
+      - Dispatcher
+      operationId: Dispatcher#index
+      parameters: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dispatcher__Stats'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__CommonError'
+        406:
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        415:
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+  /api/dispatch/v1/healthz:
+    get:
+      summary: used to check service is responding
+      tags:
+      - Dispatcher
+      operationId: Dispatcher#healthcheck
+      parameters: []
+      responses:
+        200:
+          description: OK
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__CommonError'
+        406:
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        415:
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+  /api/dispatch/v1/version:
+    get:
+      summary: returns the service commit level and build time
+      tags:
+      - Dispatcher
+      operationId: Dispatcher#version
+      parameters: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceOS__Model__Version'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__CommonError'
+        406:
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        415:
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+  /api/dispatch/v1/tcp_dispatch:
+    get:
+      summary: Registers interest in TCP connections being opened on a certain port
+      tags:
+      - Dispatcher
+      operationId: Dispatcher#tcp_dispatch
+      parameters:
+      - name: port
+        in: query
+        description: the port we expect the client to connect to
+        example: "5001"
+        required: true
+        schema:
+          type: integer
+          format: UInt32
+      - name: accept
+        in: query
+        description: a list of ip addresses we expect to connect
+        example: 192.168.0.2,10.0.0.50
+        required: true
+        schema:
+          type: string
+      responses:
+        101:
+          description: Switching Protocols
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__CommonError'
+        406:
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        415:
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+  /api/dispatch/v1/udp_dispatch:
+    get:
+      summary: registers interest of incoming UDP data
+      tags:
+      - Dispatcher
+      operationId: Dispatcher#udp_dispatch
+      parameters:
+      - name: port
+        in: query
+        description: the port we expect the client to connect to
+        example: "5001"
+        required: true
+        schema:
+          type: integer
+          format: UInt32
+      - name: accept
+        in: query
+        description: a list of ip addresses we expect to connect
+        example: 192.168.0.2,10.0.0.50
+        required: true
+        schema:
+          type: string
+      responses:
+        101:
+          description: Switching Protocols
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__CommonError'
+        406:
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        415:
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+components:
+  schemas:
+    Dispatcher__Stats:
+      type: object
+      properties:
+        udp_listeners:
+          type: object
+          additionalProperties:
+            type: integer
+            format: Int32
+        tcp_listeners:
+          type: object
+          additionalProperties:
+            type: integer
+            format: Int32
+        tcp_clients:
+          type: object
+          additionalProperties:
+            type: integer
+            format: Int32
+      required:
+      - udp_listeners
+      - tcp_listeners
+      - tcp_clients
+    PlaceOS__Model__Version:
+      type: object
+      properties:
+        service:
+          type: string
+        commit:
+          type: string
+        version:
+          type: string
+        build_time:
+          type: string
+        platform_version:
+          type: string
+      required:
+      - service
+      - commit
+      - version
+      - build_time
+      - platform_version
+    Application__CommonError:
+      type: object
+      properties:
+        error:
+          type: string
+          nullable: true
+        backtrace:
+          type: array
+          items:
+            type: string
+          nullable: true
+    Application__ContentError:
+      type: object
+      properties:
+        error:
+          type: string
+        accepts:
+          type: array
+          items:
+            type: string
+          nullable: true
+      required:
+      - error
+      description: Provides details on available data formats
+    Application__ParameterError:
+      type: object
+      properties:
+        error:
+          type: string
+        parameter:
+          type: string
+          nullable: true
+        restriction:
+          type: string
+          nullable: true
+      required:
+      - error
+      description: Provides details on which parameter is missing or invalid
