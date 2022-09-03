@@ -1,4 +1,8 @@
-## Unreleased
+## v1.5.0 (2022-09-03)
+
+### Feat
+
+- update libs and add ARM64 support ([#18](https://github.com/PlaceOS/dispatch/pull/18))
 
 ## v1.4.2 (2022-05-03)
 
@@ -32,14 +36,8 @@
 
 ## v1.2.0 (2021-10-11)
 
-### Refactor
-
-- change base endpoint `/server/` -> `/dispatch/v1/`
-- `/server/` -> `/dispatch/v1/`
-
 ### Feat
 
-- conform to PlaceOS::Model::Version
 - conform to PlaceOS::Model::Version
 - **logging**: add placeos log backend
 - add /api/server/healthz route
@@ -59,3 +57,7 @@
 - **Dockerfile**: remove from scratch
 - **specs**: ensure client has closed
 - issues identified by ameba
+
+### Refactor
+
+- `/server/` -> `/dispatch/v1/`
