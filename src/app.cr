@@ -1,5 +1,4 @@
 require "option_parser"
-
 require "./constants"
 
 # Server defaults
@@ -38,6 +37,15 @@ OptionParser.parse(ARGV.dup) do |parser|
       error.inspect_with_backtrace(STDOUT)
       exit 2
     end
+  end
+
+  parser.on("-d", "--docs", "Outputs OpenAPI documentation for this service") do
+    puts ActionController::OpenAPI.generate_open_api_docs(
+      title: App::APP_NAME,
+      version: App::VERSION,
+      description: "PlaceOS Dispatch Service. Routes incoming protocol data to drivers that have registered their interest"
+    ).to_yaml
+    exit 0
   end
 
   parser.on("-h", "--help", "Show this help") do
