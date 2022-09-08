@@ -1,3 +1,9 @@
+## v1.5.1 (2022-09-08)
+
+### Fix
+
+- **Dockerfile**: revert static build ([#19](https://github.com/PlaceOS/dispatch/pull/19))
+
 ## v1.5.0 (2022-09-03)
 
 ### Feat
