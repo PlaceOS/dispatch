@@ -4,18 +4,9 @@ on:
   schedule:
     - cron: "0 0 * * 0" # Every Sunday at midnight
 jobs:
-  style:
-    runs-on: ubuntu-latest
-    container:
-      image: crystallang/crystal
-    steps:
-      - uses: actions/checkout@v2
-      - name: Format
-        run: crystal tool format --check
-      - name: Lint
-        uses: crystal-ameba/github-action@v0.2.12
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  crystal-style:
+    uses: PlaceOS/.github/.github/workflows/crystal-style.yml@main
+
   test:
     strategy:
       fail-fast: false
@@ -23,13 +14,11 @@ jobs:
         crystal:
           - latest
           - nightly
-          - 1.0.0
     runs-on: ubuntu-latest
     steps:
       - uses: oprypin/install-crystal@v1
         with:
           crystal: ${{ matrix.crystal }}
       - uses: actions/checkout@v2
-      - run: shards install --ignore-crystal-version
+      - run: shards install --skip-postinstall --skip-executables
       - run: crystal spec --error-trace -v --order=random
-
