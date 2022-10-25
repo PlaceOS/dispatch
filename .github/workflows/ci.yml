@@ -1,27 +1,21 @@
 name: CI
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    - cron: "0 0 * * 0" # Every Sunday at midnight
+on: push
 jobs:
   crystal-style:
     uses: PlaceOS/.github/.github/workflows/crystal-style.yml@main
 
   test:
+    name: "crystal: ${{ matrix.crystal }}"
     strategy:
       fail-fast: false
       matrix:
         crystal:
           - latest
-          - nightly
     runs-on: ubuntu-latest
     steps:
       - uses: oprypin/install-crystal@v1
         with:
           crystal: ${{ matrix.crystal }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: shards install --skip-postinstall --skip-executables
       - run: crystal spec --error-trace -v --order=random
