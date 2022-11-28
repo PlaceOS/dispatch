@@ -41,8 +41,8 @@ describe Dispatcher do
 
     # Connect the expected client
     spawn do
-      TCPSocket.open("localhost", 6001) do |client|
-        client.write("testing".to_slice)
+      TCPSocket.open("localhost", 6001) do |_client|
+        _client.write("testing".to_slice)
       end
     end
 
@@ -90,13 +90,13 @@ describe Dispatcher do
     end
 
     spawn do
-      TCPSocket.open("localhost", 6001) do |client|
+      TCPSocket.open("localhost", 6001) do |_client|
         # Send some data to the server
-        client.write("testing".to_slice)
+        _client.write("testing".to_slice)
         raw_data = Bytes.new(1024)
 
         # Get a response from the server
-        bytes_read = client.read(raw_data)
+        bytes_read = _client.read(raw_data)
         sent_msg = String.new(raw_data[0, bytes_read])
       end
     end

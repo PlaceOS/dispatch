@@ -2,7 +2,7 @@ require "action-controller/logger"
 require "secrets-env"
 
 module App
-  APP_NAME     = "dispatch"
+  APP_NAME = "dispatch"
   {% begin %}
     VERSION = {{ `shards version "#{__DIR__}"`.chomp.stringify.downcase }}
   {% end %}

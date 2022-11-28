@@ -11,9 +11,6 @@ dependencies:
     github: spider-gazelle/action-controller
     version: ~> 5.3
 
-  active-model:
-    github: spider-gazelle/active-model
-
   bindata:
     github: spider-gazelle/bindata
 
