@@ -1,3 +1,9 @@
+## v1.5.2 (2023-03-15)
+
+### Refactor
+
+- migrate to postgres ([#22](https://github.com/PlaceOS/dispatch/pull/22))
+
 ## v1.5.1 (2022-09-08)
 
 ### Fix
