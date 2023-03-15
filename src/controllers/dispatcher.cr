@@ -49,7 +49,7 @@ class Dispatcher < Application
     Stats.new(
       udp_listeners: udp_listeners,
       tcp_listeners: tcp_listeners,
-      tcp_clients:   tcp_clients,
+      tcp_clients: tcp_clients,
     )
   end
 
@@ -72,11 +72,10 @@ class Dispatcher < Application
   # Registers interest in TCP connections being opened on a certain port
   @[AC::Route::WebSocket("/tcp_dispatch")]
   def tcp_dispatch(ws,
-    @[AC::Param::Info(description: "the port we expect the client to connect to", example: "5001")]
-    port : UInt32,
-    @[AC::Param::Info(description: "a list of ip addresses we expect to connect", example: "192.168.0.2,10.0.0.50")]
-    accept : String
-  ) : Nil
+                   @[AC::Param::Info(description: "the port we expect the client to connect to", example: "5001")]
+                   port : UInt32,
+                   @[AC::Param::Info(description: "a list of ip addresses we expect to connect", example: "192.168.0.2,10.0.0.50")]
+                   accept : String) : Nil
     port = port.to_i
     ip_addresses = accept.split(",")
 
@@ -90,11 +89,10 @@ class Dispatcher < Application
   # registers interest of incoming UDP data
   @[AC::Route::WebSocket("/udp_dispatch")]
   def udp_dispatch(ws,
-    @[AC::Param::Info(description: "the port we expect the client to connect to", example: "5001")]
-    port : UInt32,
-    @[AC::Param::Info(description: "a list of ip addresses we expect to connect", example: "192.168.0.2,10.0.0.50")]
-    accept : String
-  ) : Nil
+                   @[AC::Param::Info(description: "the port we expect the client to connect to", example: "5001")]
+                   port : UInt32,
+                   @[AC::Param::Info(description: "a list of ip addresses we expect to connect", example: "192.168.0.2,10.0.0.50")]
+                   accept : String) : Nil
     port = port.to_i
     ip_addresses = accept.split(",")
 
