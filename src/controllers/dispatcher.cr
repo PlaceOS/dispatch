@@ -17,9 +17,9 @@ class Dispatcher < Application
   end
 
   def acquire_token : String?
-    if (token = request.headers["Authorization"]?)
+    if token = request.headers["Authorization"]?
       token.lchop("Bearer ").rstrip
-    elsif (token = params["bearer_token"]?)
+    elsif token = params["bearer_token"]?
       token.strip
     end
   end
