@@ -1,5 +1,5 @@
 name: dispatch
-version: 1.5.2
+version: 1.6.0
 crystal: ~> 1.0
 
 targets:
@@ -9,7 +9,6 @@ targets:
 dependencies:
   action-controller:
     github: spider-gazelle/action-controller
-    version: ~> 5.3
 
   bindata:
     github: spider-gazelle/bindata
@@ -19,7 +18,6 @@ dependencies:
 
   placeos-models:
     github: placeos/models
-    version: ~> 9.0
 
   placeos-log-backend:
     github: place-labs/log-backend
