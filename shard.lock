@@ -6,11 +6,11 @@ shards:
 
   action-controller:
     git: https://github.com/spider-gazelle/action-controller.git
-    version: 7.2.2
+    version: 7.3.0
 
   active-model:
     git: https://github.com/spider-gazelle/active-model.git
-    version: 4.3.1
+    version: 4.3.2
 
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
@@ -30,7 +30,7 @@ shards:
 
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
-    version: 1.0.0+git.commit.41710010d5b8be818b1ca7b84ef412348e1912bd
+    version: 1.0.0+git.commit.a4cf9615c6518cf27c68a1755a8c2ac4ae4fe987
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
@@ -66,7 +66,7 @@ shards:
 
   habitat:
     git: https://github.com/luckyframework/habitat.git
-    version: 0.4.7
+    version: 0.4.8
 
   hot_topic:
     git: https://github.com/jgaskins/hot_topic.git
@@ -98,7 +98,7 @@ shards:
 
   nbchannel:
     git: https://github.com/wyhaines/nbchannel.cr.git
-    version: 0.1.0+git.commit.ea6517a837270361695244d14c4b03d84660f113
+    version: 0.1.0+git.commit.a8f5be6aa198abfa9f1893e1156640b8ea526094
 
   neuroplastic:
     git: https://github.com/spider-gazelle/neuroplastic.git
@@ -106,7 +106,7 @@ shards:
 
   office365:
     git: https://github.com/placeos/office365.git
-    version: 1.22.0
+    version: 1.23.2
 
   open_api:
     git: https://github.com/elbywan/open_api.cr.git
@@ -118,7 +118,7 @@ shards:
 
   openssl_ext:
     git: https://github.com/spider-gazelle/openssl_ext.git
-    version: 2.3.0
+    version: 2.4.4
 
   opentelemetry-api:
     git: https://github.com/wyhaines/opentelemetry-api.cr.git
@@ -126,7 +126,7 @@ shards:
 
   opentelemetry-instrumentation:
     git: https://github.com/wyhaines/opentelemetry-instrumentation.cr.git
-    version: 0.5.3+git.commit.5c0323d0046719bae4a7a325ca5ce0e7405bf803
+    version: 0.5.3+git.commit.cd3994b22d9f7a0d68752698974d3873a1b2fce2
 
   opentelemetry-sdk:
     git: https://github.com/wyhaines/opentelemetry-sdk.cr.git
@@ -150,7 +150,7 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 1.0.0+git.commit.e614b076c9f185d0891b505ea74c4b5e7e6307b7
+    version: 1.1.0+git.commit.e35e4c535be1ab47b6afb821723ceafb637fa4e8
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
@@ -162,7 +162,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.18.0
+    version: 9.35.1
 
   pool:
     git: https://github.com/ysbaddaden/pool.git
