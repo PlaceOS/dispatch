@@ -1,3 +1,9 @@
+## Unreleased
+
+### Feat
+
+- **shard.lock**: add crystal 1.13 support
+
 ## v1.5.2 (2023-03-15)
 
 ### Refactor
