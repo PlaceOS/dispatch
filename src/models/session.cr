@@ -20,7 +20,7 @@ class Session
     field ip_address : String
     field id_or_port : UInt64
     field data_size : UInt32, value: ->{ data.size }
-    bytes :data, length: ->{ data_size }, default: Bytes.new(0)
+    field data : Bytes = Bytes.new(0), length: ->{ data_size }
   end
 
   # Binary protocol: signal, remote_ip, client_id, size, data
