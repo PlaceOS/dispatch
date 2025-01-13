@@ -14,10 +14,6 @@ require "./controllers/application"
 require "./controllers/*"
 require "./models/*"
 
-# Require telemetry after application code
-# This causes Stackoverflow error on websocket closure.
-# require "./telemetry"
-
 # Server required after application controllers
 require "action-controller/server"
 
