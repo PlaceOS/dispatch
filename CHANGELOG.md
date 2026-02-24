@@ -2,6 +2,7 @@
 
 ### Feat
 
+- **Dockerfile**: switch to static build
 - **shard.lock**: add crystal 1.13 support
 
 ## v1.5.2 (2023-03-15)
