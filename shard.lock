@@ -142,7 +142,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.94.0
+    version: 9.94.1
 
   sanitize:
     git: https://github.com/straight-shoota/sanitize.git
