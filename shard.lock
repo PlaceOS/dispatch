@@ -130,7 +130,7 @@ shards:
 
   pg-orm:
     git: https://github.com/spider-gazelle/pg-orm.git
-    version: 2.1.0
+    version: 2.2.1
 
   place_calendar:
     git: https://github.com/placeos/calendar.git
@@ -142,7 +142,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.98.1
+    version: 9.98.3
 
   sanitize:
     git: https://github.com/straight-shoota/sanitize.git
