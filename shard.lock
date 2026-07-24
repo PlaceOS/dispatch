@@ -34,7 +34,7 @@ shards:
 
   bindata:
     git: https://github.com/spider-gazelle/bindata.git
-    version: 2.1.1
+    version: 3.2.1
 
   connect-proxy:
     git: https://github.com/spider-gazelle/connect-proxy.git
@@ -94,7 +94,7 @@ shards:
 
   jwt:
     git: https://github.com/crystal-community/jwt.git
-    version: 1.7.1
+    version: 1.7.2
 
   log_helper:
     git: https://github.com/spider-gazelle/log_helper.git
@@ -142,7 +142,7 @@ shards:
 
   placeos-models:
     git: https://github.com/placeos/models.git
-    version: 9.101.0
+    version: 9.102.0
 
   sanitize:
     git: https://github.com/straight-shoota/sanitize.git
