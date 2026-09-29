@@ -50,6 +50,9 @@ RUN for binary in /app/bin/*; do \
         xargs -I % sh -c 'mkdir -p $(dirname deps%); cp % deps%;'; \
     done
 
+# Create a temporary folder (used when configuring TLS servers)
+RUN mkdir -p /app/tmp
+
 # Build a minimal docker image
 FROM scratch
 WORKDIR /
@@ -68,6 +71,16 @@ ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 # This is required for Timezone support
 COPY --from=build /usr/share/zoneinfo/ /usr/share/zoneinfo/
+
+# Create a writeable temporary folder
+COPY --from=build --chown=0:0 /app/tmp /tmp
+
+# This seems to be the only way to set permissions properly
+COPY --from=build /bin /bin
+COPY --from=build /lib/ld-musl-* /lib/
+RUN chmod -R a+rwX /tmp
+# hadolint ignore=SC2114,DL3059
+RUN rm -rf /bin /lib
 
 # Copy the app into place
 COPY --from=build /app/deps /

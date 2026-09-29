@@ -6,7 +6,7 @@ require "./constants"
 require "./logging"
 
 # Filter out sensitive params that shouldn't be logged
-filter_params = ["password", "bearer_token"]
+filter_params = ["password", "bearer_token", "private_key"]
 keeps_headers = ["X-Request-ID"]
 
 # Application code

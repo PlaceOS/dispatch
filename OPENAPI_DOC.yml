@@ -4,7 +4,7 @@ info:
   description: PlaceOS Dispatch Service. Routes incoming protocol data to drivers
     that have registered their interest
   title: dispatch
-  version: 1.4.2
+  version: 1.6.0
 paths:
   /api/dispatch/v1:
     get:
@@ -15,7 +15,7 @@ paths:
         Also returns details about the number of TCP client connections to the servers'
       tags:
       - Dispatcher
-      operationId: Dispatcher#index
+      operationId: Dispatcher_index
       parameters: []
       responses:
         200:
@@ -59,7 +59,7 @@ paths:
       summary: used to check service is responding
       tags:
       - Dispatcher
-      operationId: Dispatcher#healthcheck
+      operationId: Dispatcher_healthcheck
       parameters: []
       responses:
         200:
@@ -99,7 +99,7 @@ paths:
       summary: returns the service commit level and build time
       tags:
       - Dispatcher
-      operationId: Dispatcher#version
+      operationId: Dispatcher_version
       parameters: []
       responses:
         200:
@@ -143,7 +143,7 @@ paths:
       summary: Registers interest in TCP connections being opened on a certain port
       tags:
       - Dispatcher
-      operationId: Dispatcher#tcp_dispatch
+      operationId: Dispatcher_tcp_dispatch
       parameters:
       - name: port
         in: query
@@ -193,12 +193,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Application__ParameterError'
+  /api/dispatch/v1/tls_dispatch:
+    get:
+      summary: Registers interest in TLS connections being opened on a certain port.
+      description: 'Registers interest in TLS connections being opened on a certain
+        port.
+
+        Uses the same websocket protocol as `tcp_dispatch`, data is sent and received
+        decrypted'
+      tags:
+      - Dispatcher
+      operationId: Dispatcher_tls_dispatch
+      parameters:
+      - name: port
+        in: query
+        description: the port we expect the client to connect to
+        example: "5001"
+        required: true
+        schema:
+          type: integer
+          format: UInt32
+      - name: accept
+        in: query
+        description: a list of ip addresses we expect to connect
+        example: 192.168.0.2,10.0.0.50
+        required: true
+        schema:
+          type: string
+      - name: certificate
+        in: query
+        description: PEM encoded certificate (optionally including the chain). A self-signed
+          certificate is generated if not provided
+        schema:
+          type: string
+          nullable: true
+      - name: private_key
+        in: query
+        description: PEM encoded private key. Required if a certificate is provided,
+          a key is generated if neither are provided
+        schema:
+          type: string
+          nullable: true
+      responses:
+        101:
+          description: Switching Protocols
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__CommonError'
+        406:
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        415:
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ContentError'
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application__ParameterError'
   /api/dispatch/v1/udp_dispatch:
     get:
       summary: registers interest of incoming UDP data
       tags:
       - Dispatcher
-      operationId: Dispatcher#udp_dispatch
+      operationId: Dispatcher_udp_dispatch
       parameters:
       - name: port
         in: query
@@ -302,6 +376,7 @@ components:
           items:
             type: string
           nullable: true
+      required: []
     Application__ContentError:
       type: object
       properties:

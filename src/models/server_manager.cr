@@ -1,18 +1,25 @@
 class TCPServerManager
-  def initialize(@server)
-    @connections = Hash(String, Hash(UInt64, IPSocket)).new do |h, k|
-      h[k] = {} of UInt64 => IPSocket
+  def initialize(@server, @tls = nil)
+    @connections = Hash(String, Hash(UInt64, IO)).new do |h, k|
+      h[k] = {} of UInt64 => IO
     end
   end
 
   property server : TCPServer
+
+  # clients are expected to negotiate TLS when this is set
+  getter tls : OpenSSL::SSL::Context::Server?
   property client_id : UInt64 = 0
   property client_count : Int32 = 0
 
   # "remote ip" => { client_id => socket }
-  property connections : Hash(String, Hash(UInt64, IPSocket))
+  property connections : Hash(String, Hash(UInt64, IO))
 
-  def new_connection(ip : String, client : IPSocket) : UInt64
+  def tls? : Bool
+    !@tls.nil?
+  end
+
+  def new_connection(ip : String, client : IO) : UInt64
     id = @client_id
     @client_id += 1
 

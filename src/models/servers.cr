@@ -3,6 +3,13 @@ require "./server_manager"
 class Servers
   Log = ::App::Log.for("servers")
 
+  # raised when a port is requested with a different transport (TCP vs TLS) to the running server
+  class TransportMismatch < Exception
+  end
+
+  # maximum time a client has to complete the TLS handshake
+  TLS_HANDSHAKE_TIMEOUT = 10.seconds
+
   # port => {"remote ip" => [session_instance]}
   @@tcp_tracking = Hash(Int32, Hash(String, Array(Session))).new do |hash, key|
     hash[key] = Hash(String, Array(Session)).new { |h, k| h[k] = [] of Session }
@@ -27,15 +34,25 @@ class Servers
     {engine_listeners, server_clients}
   end
 
-  def self.open_tcp_server(port : Int32, session : Session)
+  # tls: when provided, clients connecting to the server must negotiate TLS
+  def self.open_tcp_server(port : Int32, session : Session, tls : OpenSSL::SSL::Context::Server? = nil)
     sessions = @@tcp_tracking[port]
+    protocol = tls ? "tls" : "tcp"
 
     if sessions.empty?
-      Log.info { {server_protocol: "tcp", server_port: port.to_s, message: "opening TCP server on #{port}"} }
-      server = TCPServer.new("0.0.0.0", port)
-      manager = TCPServerManager.new(server)
+      Log.info { {server_protocol: protocol, server_port: port.to_s, message: "opening #{protocol.upcase} server on #{port}"} }
+      begin
+        server = TCPServer.new("0.0.0.0", port)
+      rescue error
+        @@tcp_tracking.delete(port)
+        raise error
+      end
+      manager = TCPServerManager.new(server, tls)
       @@tcp_servers[port] = manager
       spawn { accept_clients(sessions, server, port, manager) }
+    elsif @@tcp_servers[port].tls? != !tls.nil?
+      running = @@tcp_servers[port].tls? ? "TLS" : "TCP"
+      raise TransportMismatch.new("a #{running} server is already running on port #{port}")
     end
 
     session.tracking.each do |address|
@@ -118,6 +135,19 @@ class Servers
     end
   end
 
+  # returns nil if the handshake fails, the connection will be closed
+  def self.negotiate_tls(client : TCPSocket, context, remote_ip, port) : OpenSSL::SSL::Socket::Server?
+    client.read_timeout = TLS_HANDSHAKE_TIMEOUT
+    tls_client = OpenSSL::SSL::Socket::Server.new(client, context, sync_close: true)
+    tls_client.sync = true
+    client.read_timeout = nil
+    tls_client
+  rescue error
+    Log.warn { {message: "TLS handshake failed #{remote_ip} on #{port}: #{error.message}", server_protocol: "tls", server_port: port.to_s, remote_ip: remote_ip} }
+    client.close
+    nil
+  end
+
   def self.handle_client(sessions, client, port, manager)
     remote_ip = client.remote_address.address
 
@@ -134,6 +164,11 @@ class Servers
     client.tcp_keepalive_idle = 10
     client.tcp_nodelay = true
     client.sync = true
+
+    if context = manager.tls
+      client = negotiate_tls(client, context, remote_ip, port)
+      return unless client
+    end
 
     # register the client so we can close the connection if the session drops
     client_id = manager.new_connection(remote_ip, client)
