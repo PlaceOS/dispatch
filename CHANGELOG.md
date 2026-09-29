@@ -2,6 +2,7 @@
 
 ### Feat
 
+- add support for TLS connections
 - **Dockerfile**: switch to static build
 - **shard.lock**: add crystal 1.13 support
 
